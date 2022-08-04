@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <div style=" width: 50% ; position: relative ; left: 130px; top:150px ; display: table; background: #EECDA3;  /* fallback for old browsers */
+                background: -webkit-linear-gradient(to right, #EF629F, #EECDA3);  /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to right, #EF629F, #EECDA3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                ; padding : 10px ;">
+                    {% comment %} <div style="border: 2px solid red; border-radius: 5px; width:70%" class="mx-auto" >
+                      <img src="{{s_product.image.url}}" class="card-img-top" alt="..." width="auto" height="auto" >
+                    </div> {% endcomment %}
+                    <div class="card" style="width: 18rem; float: left;background: #e96443;  /* fallback for old browsers */
+                    background: -webkit-linear-gradient(to right, #904e95, #e96443);  /* Chrome 10-25, Safari 5.1-6 */
+                    background: linear-gradient(to right, #904e95, #e96443); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                    ">
+                      
+                      <img src="{{s_product.image.url}}" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h1> {{s_product.name}}</h1>
+                        <h2> {{s_product.dollar_amount}} $</h2>
+                        <h3> {{s_product.availability}}</h3>
+                      </div>
+
+                    </div>
+
+                    <div style=" width: 50% ; background-color:white ; padding : 10px ; float: left; margin: 0px 10px 0px 10px">
+                      
+                      {% if buy_form1 %}
+                          <form action="">
+                            {{buy_form1.as_p}}
+                            {% csrf_token %}
+                            <input type="submit" value="Buy it">
+                          </form>
+                      {% else %}
+                          <a href="">اطلاع بده</a>
+                      {% endif %}
+
+                      <p align=right> {{s_product.updated}} :تاریخ آخرین بروزرسانی</p>
+                      <p>{{s_product.description}}</p>
+
+                      <ul>
+                        
+                        {% for comment in s_comments %}
+                          <li>{{ comment.writer }} : {{ comment.comment }}</li>
+                        
+                          <span>
+
+                            {% if user == comment.writer %}
+                              <a href="{% url 'product:comment_update' comment.id %}">Edit</a>
+                            {% endif %}
+                          
+                          </span>
+                        {% endfor %}
+                      </ul>
+
+                      
+
+                      <div>
+                        
+                        {% if user.is_authenticated %}
+                        <form action="" method="POST">
+                          {% csrf_token %}
+                          {{form.as_p}}
+                          <input type="submit" value="comment now">
+                        </form>
+                          
+                        {% endif %}
+                          
+                      </div>
+                    </div >
+
+
+
+                    
+                    
+                      <div style=" width: 30% ; background-color:yellow ; padding : 10px ; float: left; margin: 0px 10px 0px 10px">
+                        {% if user == s_product.seller %}
+                        <a href="{% url 'product:product_update' s_product.id %}">Edit</a>
+                        {% endif %}
+                        <p>seller : {{s_product.seller.username}} 
+                          <span>
+                            {% if user == s_product.seller %}
+                            (YOU)
+                            {% endif %}
+                          </span>
+                        </p>
+                      </div>
+                    
+                      
+                    
+        </div>  
+
+
+{% endblock content %}
